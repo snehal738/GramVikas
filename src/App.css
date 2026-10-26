@@ -1,983 +1,665 @@
+/* =========================================================
+   GRAMVIKAS – "Saffron & Navy" theme
+   Saffron orange + deep navy blue. A sun rising over fields
+   in the header, built-in icons (no HTML changes needed).
+   Same class names as before: drop-in replacement.
+   Fonts: Baloo 2 (headings) + Hind (body) – both support Marathi.
+   ========================================================= */
 
-/* =========================================
-   GRAMVIKAS - ORANGE AND WHITE THEME
-   ========================================= */
+@import url("https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Hind:wght@400;500;600;700&display=swap");
 
 :root {
-  --primary: #ea580c;
-  --primary-dark: #c2410c;
-  --primary-light: #fff7ed;
-  --accent: #fb923c;
-  --background: #fffaf5;
-  --surface: #ffffff;
-  --border: #fed7aa;
-  --text: #292524;
-  --muted: #78716c;
-  --success: #15803d;
-  --shadow: 0 4px 14px rgba(124, 45, 18, 0.08);
+  --orange: #ff7a00;
+  --orange-deep: #c25400;
+  --orange-soft: #ffa24d;
+  --orange-wash: #fff1e2;
+  --navy: #1b3a6b;
+  --navy-deep: #0f2347;
+  --navy-mid: #2f5fa8;
+  --mint: #e8eef9;
+  --text: #1b2433;
+  --muted: #5f6b80;
+  --page: #f5f8fd;
+  --line: #d9e2f2;
+  --danger: #c4204f;
+  --r-s: 10px;
+  --r-m: 16px;
+  --r-l: 28px;
+  --shadow-s: 0 2px 10px rgba(15, 35, 71, 0.08);
+  --shadow-m: 0 14px 34px rgba(15, 35, 71, 0.18);
+
+  /* ---- icons (used as masks, colored by background) ---- */
+  --i-complaint: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M21 15a2 2 0 0 1-2 2H8l-5 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z'/><path d='M12 7v4M12 14h.01'/></svg>");
+  --i-notice: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9'/><path d='M13.7 21a2 2 0 0 1-3.4 0'/></svg>");
+  --i-project: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M3 21h18M5 21V10l7-6 7 6v11'/><path d='M10 21v-6h4v6'/></svg>");
+  --i-scheme: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z'/><path d='M14 3v6h6M8 13h8M8 17h8'/></svg>");
+  --i-people: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='9' cy='8' r='3.5'/><path d='M2 20c0-4 3-6 7-6s7 2 7 6'/><path d='M16 4.5a3.5 3.5 0 0 1 0 7M22 20c0-3-1.500-5-4-5.800'/></svg>");
+  --i-leaf: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M11 20A7 7 0 0 1 4 13c0-6 6-9 16-9 0 10-3 16-9 16z'/><path d='M4 21c3-6 6-9 11-12'/></svg>");
+  --i-water: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 3s6 6.500 6 11a6 6 0 0 1-12 0c0-4.500 6-11 6-11z'/></svg>");
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
-  background: var(--background);
+  font-family: "Hind", "Noto Sans Devanagari", Arial, sans-serif;
+  font-size: 17px;
+  background: var(--page);
   color: var(--text);
-  line-height: 1.6;
+  line-height: 1.65;
 }
 
-#root {
-  min-height: 100vh;
+h1, h2, h3 { font-family: "Baloo 2", "Hind", sans-serif; line-height: 1.2; }
+
+#root { min-height: 100vh; }
+
+.app { min-height: 100vh; display: flex; flex-direction: column; text-align: center; }
+
+/* ---------- shared icon mechanics ---------- */
+.services button::before,
+.overview-card h3::before,
+.stat-card h3::before,
+.admin-complaint h3::before, .complaint-card h3::before, .complaint-item h3::before,
+.notice-card h3::before, .notice-item h3::before,
+.project-card h3::before, .scheme-card h3::before {
+  content: "";
+  flex: none;
+  background: var(--orange);
+  -webkit-mask: var(--ic) center / contain no-repeat;
+  mask: var(--ic) center / contain no-repeat;
 }
 
-.app {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-}
-
-/* HEADER */
-
+/* ---------- HEADER: sun rising over fields ---------- */
 .app header {
-  background: linear-gradient(135deg, #c2410c, #f97316);
-  color: white;
-  padding: 28px 16px;
-  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+  padding: 48px 20px 100px;
+  color: #fff;
+  background:
+    radial-gradient(circle at 12% 20%, rgba(255, 255, 255, 0.08) 0 90px, transparent 91px),
+    linear-gradient(170deg, var(--navy-deep), var(--navy) 70%, var(--navy-mid));
 }
 
-.app header h1 {
-  font-size: 38px;
-  font-weight: 800;
-  margin-bottom: 4px;
-  letter-spacing: 0.5px;
+.app header > * { position: relative; z-index: 1; }
+
+/* the sun */
+.app header::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  right: 9%;
+  bottom: -70px;
+  width: 270px;
+  height: 270px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ffd08a 0 38%, var(--orange) 39% 70%, rgba(255, 122, 0, 0.35) 71% 100%);
+  animation: sunrise 1.6s ease-out both;
 }
 
-.app header p {
-  margin: 5px 0 16px;
-  color: #fff7ed;
+/* two layers of fields */
+.app header::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  left: 0; right: 0; bottom: -1px;
+  height: 72px;
+  pointer-events: none;
+  background:
+    url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 72' preserveAspectRatio='none'><path d='M0 52 C300 28 600 70 900 50 S1300 38 1440 54 V72 H0Z' fill='%23f5f8fd'/></svg>") bottom / 100% 100% no-repeat,
+    url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 72' preserveAspectRatio='none'><path d='M0 36 C240 6 480 62 720 34 S1200 8 1440 38 V72 H0Z' fill='%23c6d6f0'/></svg>") bottom / 100% 100% no-repeat;
 }
+
+@keyframes sunrise { from { transform: translateY(110px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+.app header h1 { font-size: clamp(38px, 6.5vw, 64px); font-weight: 800; margin-bottom: 2px; text-shadow: 0 3px 0 rgba(0, 0, 0, 0.18); }
+.app header p { margin: 4px 0 22px; color: #d6e2f7; font-size: 19px; }
 
 .app header button {
-  margin: 5px;
-  padding: 10px 18px;
-  background: white;
-  color: var(--primary-dark);
-  border: 1px solid white;
-  border-radius: 7px;
-  font-size: 15px;
-  font-weight: bold;
+  margin: 4px;
+  padding: 11px 24px;
+  font: 700 15px "Hind", sans-serif;
+  color: var(--navy-deep);
+  background: var(--orange);
+  border: 0;
+  border-radius: 999px;
   cursor: pointer;
-  transition: 0.2s ease;
+  transition: background 0.2s, color 0.2s;
 }
 
-.app header button:hover {
-  background: #ffedd5;
-  transform: translateY(-2px);
-}
+.app header button:hover { background: #fff; color: var(--navy); }
 
-/* MAIN LAYOUT */
+/* ---------- MAIN ---------- */
+.app main { width: 100%; max-width: 1150px; margin: -50px auto 0; padding: 0 22px 44px; flex: 1; position: relative; z-index: 3; }
+.app main h2 { color: var(--navy-deep); font-size: 30px; font-weight: 800; margin-bottom: 12px; }
+.app main h3 { color: var(--navy-deep); }
+.app main > p { color: var(--muted); margin-bottom: 22px; }
 
-.app main {
-  width: 100%;
-  max-width: 1150px;
-  margin: 0 auto;
-  padding: 32px 22px;
-  flex: 1;
-}
-
-.app main h2 {
-  color: var(--primary-dark);
-  font-size: 29px;
-  margin-bottom: 14px;
-}
-
-.app main h3 {
-  color: #9a3412;
-}
-
-.app main > p {
-  color: var(--muted);
-  margin-bottom: 22px;
-}
-
-/* ALL BUTTONS */
-
+/* ---------- BUTTONS (navy = action, orange on hover) ---------- */
 .app main button {
-  padding: 11px 17px;
-  border: none;
-  border-radius: 7px;
-  background: var(--primary);
-  color: white;
-  font-size: 15px;
-  font-weight: bold;
+  padding: 11px 22px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--navy);
+  color: #fff;
+  font: 700 15px "Hind", sans-serif;
   cursor: pointer;
-  transition: background 0.2s, transform 0.2s;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
 }
 
-.app main button:hover {
-  background: var(--primary-dark);
-  transform: translateY(-1px);
+.app main button:hover { background: var(--orange-deep); box-shadow: 0 6px 16px rgba(194, 84, 0, 0.35); }
+.app button:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
+
+.app button:focus-visible, .app a:focus-visible, .app input:focus-visible,
+.app select:focus-visible, .app textarea:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
+
+/* ---------- FORMS ---------- */
+.app main input, .app main textarea, .app main select {
+  width: 100%; padding: 13px 16px; margin: 5px 0;
+  border: 2px solid var(--line); border-radius: var(--r-s);
+  background: #fff; color: var(--text); font: inherit;
 }
 
-.app button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none;
-}
-
-/* INPUTS AND FORMS */
-
-.app main input,
-.app main textarea,
-.app main select {
-  width: 100%;
-  padding: 12px 14px;
-  margin: 5px 0;
-  border: 1px solid #d6d3d1;
-  border-radius: 7px;
-  background: white;
-  color: var(--text);
-  font: inherit;
+.app main input:focus, .app main textarea:focus, .app main select:focus {
+  border-color: var(--orange);
+  box-shadow: 0 0 0 4px rgba(255, 122, 0, 0.18);
   outline: none;
 }
 
-.app main input:focus,
-.app main textarea:focus,
-.app main select:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.12);
-}
+.app main textarea { min-height: 110px; resize: vertical; }
+.app main form { width: 100%; }
+.app main label { display: block; margin: 8px 0 4px; text-align: left; font-weight: 700; color: var(--navy); }
 
-.app main textarea {
-  min-height: 110px;
-  resize: vertical;
-}
-
-.app main form {
-  width: 100%;
-}
-
-.app main label {
-  display: block;
-  margin: 8px 0 4px;
-  text-align: left;
-  font-weight: bold;
-  color: #44403c;
-}
-
-/* SERVICE CARDS */
-
+/* ---------- HOME SERVICE SHORTCUTS ---------- */
 .services {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-  gap: 18px;
-  margin: 22px 0;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
+  gap: 16px;
+  margin: 0 0 28px;
 }
 
-.services button {
-  min-height: 85px;
-  padding: 18px;
-  background: white;
-  color: var(--primary-dark);
-  border: 1px solid var(--border);
-  border-bottom: 4px solid var(--accent);
-  border-radius: 10px;
-  font-size: 16px;
-  font-weight: bold;
-  box-shadow: var(--shadow);
+.app main .services button {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 92px;
+  padding: 18px 20px;
+  background: #fff;
+  color: var(--navy-deep);
+  font-size: 17px;
+  text-align: left;
+  border-radius: var(--r-m);
+  border-bottom: 5px solid var(--orange);
+  box-shadow: 0 10px 26px rgba(15, 35, 71, 0.16);
 }
 
-.services button:hover {
-  background: var(--primary-light);
-  color: var(--primary-dark);
-}
+.services button::before { width: 40px; height: 40px; }
+.services button:nth-child(4n+1) { --ic: var(--i-complaint); }
+.services button:nth-child(4n+2) { --ic: var(--i-notice); }
+.services button:nth-child(4n+3) { --ic: var(--i-project); }
+.services button:nth-child(4n+4) { --ic: var(--i-scheme); }
 
-/* VILLAGE OVERVIEW */
+.app main .services button:hover { background: var(--navy); color: #fff; transform: translateY(-4px); }
+.services button:hover::before { background: var(--orange-soft); }
 
-.village-overview {
-  margin: 28px 0;
-  padding: 25px;
-  background: white;
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  box-shadow: var(--shadow);
-}
-
-.village-overview > p {
-  margin: 8px 0 20px;
-  line-height: 1.8;
-  color: var(--muted);
-}
+/* ---------- VILLAGE OVERVIEW ---------- */
+.village-overview { margin: 22px 0 30px; padding: 34px; background: var(--mint); border-radius: var(--r-l); text-align: left; }
+.village-overview h2 { font-size: clamp(26px, 3.4vw, 38px); }
+.village-overview > p { max-width: 760px; margin: 8px 0 6px; color: #3a4a66; line-height: 1.8; }
 
 .overview-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
   gap: 18px;
-  margin-top: 20px;
+  margin-top: 24px;
 }
 
 .overview-card {
-  padding: 22px 18px;
-  background: var(--primary-light);
-  border: 1px solid var(--border);
-  border-radius: 11px;
-  text-align: center;
-  transition: transform 0.2s, box-shadow 0.2s;
+  display: flex; flex-direction: column; align-items: flex-start;
+  min-height: 210px; padding: 26px;
+  background: #fff; border-radius: var(--r-m); box-shadow: var(--shadow-s);
+  text-align: left; transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.overview-card:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow);
-}
+.overview-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-m); }
+.overview-card h3 { margin-bottom: 8px; font-size: 21px; }
+.overview-card h3::before { display: block; width: 46px; height: 46px; margin-bottom: 12px; }
+.overview-card:nth-child(4n+1) { --ic: var(--i-leaf); }
+.overview-card:nth-child(4n+2) { --ic: var(--i-people); }
+.overview-card:nth-child(4n+3) { --ic: var(--i-water); }
+.overview-card:nth-child(4n+4) { --ic: var(--i-project); }
+.overview-card p { flex: 1; margin-bottom: 18px; color: var(--muted); }
+.app main .overview-card button { width: 100%; margin-top: auto; }
 
-.overview-card h3 {
-  color: var(--primary-dark);
-  margin-bottom: 10px;
-}
-
-.overview-card p {
-  min-height: 48px;
-  margin-bottom: 15px;
-  color: var(--muted);
-  line-height: 1.6;
-}
-
-.overview-card button {
-  margin-top: 5px;
-}
-
-/* COMPLAINT DASHBOARD */
-
-.dashboard {
-  margin: 28px 0;
-  padding: 25px;
-  background: white;
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  box-shadow: var(--shadow);
-}
-
-.dashboard h2 {
-  color: var(--primary-dark);
-}
+/* ---------- STATS DASHBOARD ---------- */
+.dashboard { margin: 28px 0; padding: 30px; background: var(--navy-deep); border-radius: var(--r-l); text-align: left; color: #fff; }
+.dashboard h2 { color: #fff; }
 
 .dashboard-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 170px), 1fr));
   gap: 16px;
   margin-top: 20px;
 }
 
-.stat-card {
-  padding: 22px 12px;
-  background: var(--primary-light);
-  border: 1px solid var(--border);
-  border-top: 4px solid var(--accent);
-  border-radius: 10px;
+.stat-card { padding: 22px; background: rgba(255, 255, 255, 0.08); border-radius: var(--r-m); border-bottom: 4px solid var(--orange); }
+
+.app main .stat-card h3, .stat-card h3 {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 6px; font: 600 15px "Hind", sans-serif; color: #d6e2f7;
 }
 
-.stat-card h3 {
-  color: #9a3412;
-  font-size: 15px;
-  margin-bottom: 10px;
+.stat-card h3::before { width: 22px; height: 22px; background: var(--orange-soft); }
+.stat-card:nth-child(4n+1) { --ic: var(--i-people); }
+.stat-card:nth-child(4n+2) { --ic: var(--i-leaf); }
+.stat-card:nth-child(4n+3) { --ic: var(--i-notice); }
+.stat-card:nth-child(4n+4) { --ic: var(--i-project); }
+.stat-card p { font-family: "Baloo 2", sans-serif; font-weight: 800; font-size: clamp(32px, 3.4vw, 44px); color: var(--orange-soft); line-height: 1.1; }
+
+/* ---------- inline-icon card headings ---------- */
+.admin-complaint h3, .complaint-card h3, .complaint-item h3,
+.notice-card h3, .notice-item h3, .project-card h3, .scheme-card h3 {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 6px;
 }
 
-.stat-card p {
-  margin: 0;
-  color: var(--primary);
-  font-size: 34px;
-  font-weight: 800;
+.admin-complaint h3::before, .complaint-card h3::before, .complaint-item h3::before,
+.notice-card h3::before, .notice-item h3::before,
+.project-card h3::before, .scheme-card h3::before { width: 26px; height: 26px; }
+
+.admin-complaint, .complaint-card, .complaint-item, .complaint-box,
+.notice-card, .notice-item, .project-card, .scheme-card { --ic: var(--i-scheme); }
+.admin-complaint, .complaint-card, .complaint-item { --ic: var(--i-complaint); }
+.notice-card, .notice-item { --ic: var(--i-notice); }
+.project-card { --ic: var(--i-project); }
+
+/* ---------- COMPLAINTS ---------- */
+.complaint-page, .complaints-page, .complaint-list, .complaint-db { width: 100%; max-width: 900px; margin: 20px auto; padding: 20px; }
+
+.admin-complaint, .complaint-card, .complaint-item, .complaint-box {
+  margin: 14px 0; padding: 22px 24px;
+  background: #fff; border: 2px solid var(--line); border-left: 8px solid var(--navy);
+  border-radius: var(--r-m); box-shadow: var(--shadow-s); text-align: left;
 }
 
-/* COMPLAINTS AND ADMIN PANEL */
+.admin-complaint select { max-width: 320px; }
 
-.admin-panel,
-.complaint-page,
-.complaints-page,
-.complaint-list,
-.complaint-db {
-  width: 100%;
-  max-width: 900px;
-  margin: 20px auto;
-  padding: 20px;
+/* ---------- NOTICES ---------- */
+.notices-page { max-width: 900px; margin: 20px auto; padding: 20px; }
+.notice-form { display: flex; flex-direction: column; gap: 12px; margin: 20px 0 28px; padding: 26px; background: var(--orange-wash); border-radius: var(--r-l); }
+.notice-form input, .notice-form textarea { margin: 0; }
+
+.notice-card, .notice-item {
+  margin: 16px 0; padding: 22px 24px;
+  background: #fff; border-radius: var(--r-m); box-shadow: var(--shadow-s);
+  border-left: 8px solid var(--orange); text-align: left;
 }
 
-.admin-complaint,
-.complaint-card,
-.complaint-item,
-.complaint-box {
-  margin: 16px 0;
-  padding: 20px;
-  background: white;
-  border: 1px solid var(--border);
-  border-left: 5px solid var(--primary);
-  border-radius: 10px;
-  box-shadow: var(--shadow);
-  text-align: left;
-}
-
-.admin-complaint h3,
-.complaint-card h3,
-.complaint-item h3 {
-  color: var(--primary-dark);
-  margin-bottom: 8px;
-}
-
-.admin-complaint select {
-  max-width: 320px;
-}
-
-.admin-panel button {
-  margin: 5px;
-}
-
-/* NOTICES */
-
-.notices-page {
-  max-width: 900px;
-  margin: 20px auto;
-  padding: 20px;
-}
-
-.notice-form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin: 20px 0 28px;
-  padding: 22px;
-  background: white;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  box-shadow: var(--shadow);
-}
-
-.notice-form input,
-.notice-form textarea {
-  margin: 0;
-}
-
-.notice-card,
-.notice-item {
-  margin: 15px 0;
-  padding: 20px;
-  background: white;
-  border: 1px solid var(--border);
-  border-left: 5px solid var(--accent);
-  border-radius: 10px;
-  box-shadow: var(--shadow);
-  text-align: left;
-}
-
-.notice-card h3,
-.notice-item h3 {
-  color: var(--primary-dark);
-  margin-bottom: 8px;
-}
-
-/* DEVELOPMENT PROJECTS */
-
-.projects-page {
-  max-width: 1100px;
-  margin: 20px auto;
-  padding: 20px;
-}
-
-.projects-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 20px;
-  margin-top: 24px;
-}
+/* ---------- DEVELOPMENT PROJECTS ---------- */
+.projects-page { max-width: 1100px; margin: 20px auto; padding: 20px; }
+.projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: 20px; margin-top: 24px; }
 
 .project-card {
-  padding: 22px;
-  background: white;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  text-align: left;
-  box-shadow: var(--shadow);
-  transition: transform 0.2s;
+  padding: 24px; background: #fff; border-radius: var(--r-m);
+  border-top: 6px solid var(--navy); box-shadow: var(--shadow-s);
+  text-align: left; transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.project-card:hover {
-  transform: translateY(-3px);
-}
+.project-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-m); }
 
-.project-card h3 {
-  color: var(--primary-dark);
-  margin-bottom: 10px;
-}
+.progress-bar { height: 14px; margin: 14px 0; background: var(--mint); border-radius: 999px; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, var(--navy-mid), var(--orange)); border-radius: 999px; transition: width 0.6s ease; }
 
-.progress-bar {
-  height: 12px;
-  margin: 12px 0;
-  background: #ffedd5;
-  border-radius: 20px;
-  overflow: hidden;
-}
-
-.progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #f97316, #fb923c);
-  border-radius: 20px;
-}
-
-/* GOVERNMENT SCHEMES */
-
-.schemes-page {
-  max-width: 1150px;
-  margin: 20px auto;
-  padding: 20px;
-}
-
-.schemes-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
-  margin-top: 24px;
-}
+/* ---------- GOVERNMENT SCHEMES ---------- */
+.schemes-page { max-width: none; margin: 0; padding: 0; text-align: left; }
+.schemes-page > h2 { font-size: 30px; }
+.schemes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 270px), 1fr)); gap: 20px; margin-top: 24px; }
 
 .scheme-card {
-  padding: 22px;
-  background: white;
-  border: 1px solid var(--border);
-  border-top: 4px solid var(--primary);
-  border-radius: 12px;
-  text-align: left;
-  box-shadow: var(--shadow);
+  padding: 26px; background: #fff; border: 2px solid var(--line);
+  border-radius: var(--r-m); text-align: left;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
 }
 
-.scheme-card h3 {
-  color: var(--primary-dark);
-  margin-bottom: 10px;
-}
+.scheme-card:hover { border-color: var(--orange); box-shadow: var(--shadow-m); transform: translateY(-4px); }
+.scheme-card h3 { font-size: 19px; }
+.scheme-card p { color: var(--muted); overflow-wrap: anywhere; }
 
 .scheme-card a {
-  display: inline-block;
-  margin-top: 12px;
-  color: var(--primary-dark);
-  font-weight: bold;
-  text-decoration: none;
+  display: inline-block; margin-top: 14px; padding: 8px 18px;
+  background: var(--mint); color: var(--navy); font-weight: 700;
+  text-decoration: none; border-radius: 999px;
 }
 
-.scheme-card a:hover {
-  color: var(--primary);
-  text-decoration: underline;
-}
+.scheme-card a:hover { background: var(--orange-deep); color: #fff; }
+.scheme-note { margin-top: 26px; padding: 16px 20px; background: var(--orange-wash); border-radius: var(--r-m); color: #5a3a1c; font-size: 15px; }
+.scheme-admin-form { margin: 22px 0; padding: 26px; background: var(--orange-wash); border-radius: var(--r-l); }
+.scheme-admin-form h3 { margin-bottom: 18px; }
+.scheme-admin-form form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 18px; }
+.scheme-admin-form label { margin: 0; font-size: 15px; }
+.scheme-admin-form label:nth-child(3), .scheme-admin-form label:nth-child(4),
+.scheme-admin-form label:nth-child(5), .scheme-admin-form label:nth-child(6) { grid-column: 1 / -1; }
+.scheme-admin-form button { justify-self: start; margin: 6px 0 0; }
 
-.scheme-note {
-  margin-top: 24px;
-  color: var(--muted);
-  font-size: 14px;
-}
-
-/* ADMIN LOGIN */
-
+/* ---------- ADMIN LOGIN ---------- */
 .admin-login {
-  max-width: 420px;
-  margin: 35px auto;
-  padding: 26px;
-  background: white;
-  border: 1px solid var(--border);
-  border-top: 5px solid var(--primary);
-  border-radius: 12px;
-  box-shadow: var(--shadow);
+  max-width: 430px; margin: 40px auto; padding: 32px;
+  background: #fff; border-radius: var(--r-l); box-shadow: var(--shadow-m);
+  border-top: 8px solid var(--orange);
 }
 
-.admin-login h2 {
-  color: var(--primary-dark);
-  margin-bottom: 20px;
+.admin-login h2 { margin-bottom: 18px; }
+.admin-login form { display: flex; flex-direction: column; gap: 12px; }
+.admin-login button { padding: 14px; }
+
+/* ---------- ADMIN PANEL ---------- */
+.admin-panel {
+  display: grid; grid-template-columns: 255px minmax(0, 1fr);
+  column-gap: 24px; align-content: start;
+  max-width: 1400px; margin: 0 auto; padding: 24px; text-align: left;
 }
 
-.admin-login form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+.admin-heading {
+  grid-column: 1 / -1; margin-bottom: 24px; padding: 30px; color: #fff;
+  background: radial-gradient(circle at 94% 120%, var(--orange) 0 110px, transparent 111px), var(--navy-deep);
+  border-radius: var(--r-l);
 }
 
-.admin-login input {
-  padding: 13px;
-  border: 1px solid #d6d3d1;
-  border-radius: 7px;
-  font: inherit;
+.admin-heading h2, .admin-heading p { color: #fff !important; }
+.admin-heading h2 { margin: 0 0 6px; font-size: clamp(26px, 3vw, 36px); }
+.admin-heading p { margin: 0; opacity: 0.9; }
+.admin-eyebrow { display: inline-block; margin-bottom: 8px; padding: 3px 14px; background: var(--orange); color: var(--navy-deep); border-radius: 999px; font-size: 13px; font-weight: 700; }
+
+.admin-service-nav {
+  grid-column: 1; grid-row: 2; align-self: start; position: sticky; top: 20px;
+  display: flex; flex-direction: column; gap: 6px; width: 100%; padding: 14px;
+  background: #fff; border-radius: var(--r-l); box-shadow: var(--shadow-s);
 }
 
-.admin-login button {
-  padding: 12px;
-  border: none;
-  border-radius: 7px;
-  background: var(--primary);
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
+.app main .admin-service-nav button {
+  display: flex; flex-direction: row; align-items: center; gap: 12px;
+  width: 100%; min-height: 52px; margin: 0; padding: 8px 14px;
+  background: transparent; color: var(--navy-deep);
+  border-radius: 999px; font-size: 15px; font-weight: 700; text-align: left; box-shadow: none;
 }
 
-.admin-login button:hover {
-  background: var(--primary-dark);
+.admin-service-nav button span {
+  display: grid; place-items: center; flex: none;
+  width: 36px; height: 36px; font-size: 19px;
+  background: var(--mint); border-radius: 50%;
 }
 
-.admin-login button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+.app main .admin-service-nav button:hover { background: var(--orange-wash); color: var(--orange-deep); }
+.app main .admin-service-nav button.admin-nav-active { background: var(--navy); color: #fff; box-shadow: 0 6px 14px rgba(27, 58, 107, 0.35); }
+.admin-service-nav button.admin-nav-active span { background: var(--orange); }
+
+.admin-service-content, .admin-panel > .admin-stats, .admin-panel > .admin-message,
+.admin-panel > .admin-list-heading, .admin-panel > .admin-refresh,
+.admin-panel > .admin-empty, .admin-panel > .admin-complaint-list { grid-column: 2; }
+
+.admin-service-content { min-width: 0; padding: 28px; background: #fff; border-radius: var(--r-l); box-shadow: var(--shadow-s); }
+.admin-service-content > h3 { margin-bottom: 8px; font-size: 24px; }
+.admin-service-content > p { color: var(--muted); }
+
+.admin-delete-button, .app main .admin-delete-button {
+  margin-top: 12px; padding: 9px 18px; background: var(--danger); color: #fff;
+  border: 0; border-radius: 999px; font-weight: 700; cursor: pointer;
 }
 
-/* TABLES AND LISTS */
+.app main .admin-delete-button:hover { background: #8f1639; box-shadow: none; }
 
+/* ---------- TABLES & LISTS ---------- */
 .app main table {
-  width: 100%;
-  margin: 20px 0;
-  border-collapse: collapse;
-  background: white;
+  width: 100%; margin: 20px 0; border-collapse: separate; border-spacing: 0;
+  background: #fff; border: 2px solid var(--line); border-radius: var(--r-m); overflow: hidden;
 }
 
-.app main th {
-  background: var(--primary);
-  color: white;
-}
+.app main th { background: var(--navy); color: #fff; font-weight: 700; }
+.app main th, .app main td { padding: 12px 14px; border-bottom: 1px solid var(--line); text-align: left; }
+.app main tr:last-child td { border-bottom: 0; }
+.app main tr:nth-child(even) td { background: var(--mint); }
+.app main ul, .app main ol { padding-left: 24px; text-align: left; }
+.app main li { margin: 8px 0; }
 
-.app main th,
-.app main td {
-  padding: 12px;
-  border: 1px solid var(--border);
-  text-align: left;
-}
-
-.app main tr:nth-child(even) {
-  background: var(--primary-light);
-}
-
-.app main ul,
-.app main ol {
-  padding-left: 24px;
-  text-align: left;
-}
-
-.app main li {
-  margin: 8px 0;
-}
-
-/* FOOTER */
-
+/* ---------- FOOTER ---------- */
 .app footer {
-  margin-top: auto;
-  padding: 22px 15px;
-  background: #7c2d12;
-  color: white;
-  text-align: center;
+  margin-top: auto; padding: 26px 15px;
+  background: var(--navy-deep); border-top: 6px solid var(--orange);
+  color: #fff; text-align: center;
 }
 
-.app footer p {
-  margin: 0;
-  color: #ffedd5;
-}
+.app footer p { margin: 0; color: #d6e2f7; }
 
-/* RESPONSIVE DESIGN */
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 800px) {
+  .admin-panel { display: flex; flex-direction: column; gap: 18px; padding: 14px; }
+  .admin-heading { margin: 0; padding: 22px; }
+  .admin-service-nav { position: static; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .admin-service-content { padding: 18px; }
+}
 
 @media (max-width: 600px) {
-  .app header {
-    padding: 22px 12px;
-  }
-
-  .app header h1 {
-    font-size: 30px;
-  }
-
-  .app main {
-    padding: 22px 14px;
-  }
-
-  .app main h2 {
-    font-size: 24px;
-  }
-
-  .village-overview,
-  .dashboard {
-    padding: 17px;
-  }
-
-  .overview-grid,
-  .dashboard-grid,
-  .projects-grid,
-  .schemes-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .admin-panel,
-  .complaint-page,
-  .complaints-page,
-  .complaint-list,
-  .complaint-db,
-  .notices-page,
-  .projects-page,
-  .schemes-page {
-    padding: 12px;
-  }
-
-  .app main table {
-    font-size: 13px;
-  }
-
-  .app main th,
-  .app main td {
-    padding: 8px;
-  }
-}
-
-
-.admin-service-nav {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
-  margin: 24px 0;
-}
-
-.admin-service-nav button {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 16px;
-  color: #44403c;
-  background: #fff7ed;
-  border: 1px solid #fed7aa;
-  border-radius: 12px;
-  text-align: left;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.admin-service-nav button span {
-  font-size: 24px;
-}
-
-.admin-service-nav button:hover,
-.admin-service-nav button.admin-nav-active {
-  color: #fff;
-  background: #ea580c;
-  border-color: #ea580c;
-}
-
-.admin-service-content {
-  margin-top: 24px;
-  padding: 22px;
-  background: #fff;
-  border: 1px solid #fed7aa;
-  border-radius: 12px;
-}
-
-.admin-service-content h3 {
-  color: #9a3412;
-}
-
-@media (max-width: 750px) {
-  .admin-service-nav {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .admin-service-content {
-    padding: 14px;
-  }
-}
-
-@media (max-width: 420px) {
-  .admin-service-nav {
-    grid-template-columns: 1fr;
-  }
-}
-
-
-/* =========================================
-   GRAMVIKAS MODERN ADMIN DASHBOARD
-   Add at the bottom of App.css
-   ========================================= */
-
-.admin-panel {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 28px;
-  text-align: left;
-}
-
-.admin-heading {
-  padding: 28px;
-  margin-bottom: 24px;
-  background: linear-gradient(125deg, #9a3412, #f97316);
-  color: white;
-  border-radius: 20px;
-  box-shadow: 0 12px 30px rgba(154, 52, 18, 0.16);
-}
-
-.admin-heading h2,
-.admin-heading p {
-  color: white !important;
-}
-
-.admin-eyebrow {
-  display: inline-block;
-  margin-bottom: 8px;
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 2px;
-  color: #ffedd5;
-}
-
-.admin-heading h2 {
-  margin: 0 0 8px;
-  font-size: clamp(25px, 3vw, 36px);
-}
-
-.admin-heading p {
-  margin: 0;
-  opacity: 0.9;
-}
-
-/* Vertical service sidebar */
-
-.admin-service-nav {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 245px;
-  padding: 16px;
-  margin: 0;
-  background: #ffffff;
-  border: 1px solid #fed7aa;
-  border-radius: 18px;
-  box-shadow: 0 8px 25px rgba(124, 45, 18, 0.06);
-}
-
-.admin-service-nav button {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 12px;
-  width: 100%;
-  min-height: 52px;
-  margin: 0;
-  padding: 13px 15px;
-  background: transparent;
-  border: 1px solid transparent;
-  border-radius: 11px;
-  color: #57534e;
-  font-size: 14px;
-  font-weight: 700;
-  text-align: left;
-  transition: background 0.2s ease, color 0.2s ease;
-}
-
-.admin-service-nav button span {
-  font-size: 21px;
-}
-
-.admin-service-nav button:hover,
-.admin-service-nav button.admin-nav-active {
-  color: #c2410c;
-  background: #fff1e6;
-  border-color: #fed7aa;
-  transform: none;
-}
-
-.admin-service-content {
-  min-width: 0;
-  margin: 0;
-  padding: 26px;
-  background: #ffffff;
-  border: 1px solid #f1e3d6;
-  border-radius: 18px;
-  box-shadow: 0 8px 25px rgba(124, 45, 18, 0.05);
-}
-
-.admin-service-content > h3 {
-  margin-bottom: 8px;
-  font-size: 23px;
-}
-
-.admin-service-content > p {
-  color: #78716c;
-}
-
-/* Place the sidebar beside the content */
-
-.admin-panel {
-  display: grid;
-  grid-template-columns: 245px minmax(0, 1fr);
-  column-gap: 24px;
-  align-content: start;
-}
-
-.admin-heading {
-  grid-column: 1 / -1;
-}
-
-.admin-service-nav {
-  grid-column: 1;
-  grid-row: 2;
-  align-self: start;
-  position: sticky;
-  top: 20px;
-}
-
-.admin-service-content,
-.admin-panel > .admin-stats,
-.admin-panel > .admin-message,
-.admin-panel > .admin-list-heading,
-.admin-panel > .admin-refresh,
-.admin-panel > .admin-empty,
-.admin-panel > .admin-complaint-list {
-  grid-column: 2;
-}
-
-/* Modern government scheme cards */
-
-.schemes-page {
-  max-width: none;
-  margin: 0;
-  padding: 0;
-  text-align: left;
-}
-
-.schemes-page > h2 {
-  font-size: 28px;
-  letter-spacing: -0.5px;
-}
-
-.schemes-grid {
-  grid-template-columns: repeat(
-    auto-fit,
-    minmax(min(100%, 270px), 1fr)
-  );
-  gap: 20px;
-}
-
-.scheme-card {
-  position: relative;
-  overflow: hidden;
-  padding: 24px;
-  border: 1px solid #f1e3d6;
-  border-top: 4px solid #f97316;
-  border-radius: 16px;
-  box-shadow: 0 5px 18px rgba(124, 45, 18, 0.06);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.scheme-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 14px 30px rgba(124, 45, 18, 0.12);
-}
-
-.scheme-card h3 {
-  font-size: 19px;
-  line-height: 1.4;
-}
-
-.scheme-card p {
-  margin-top: 12px;
-  color: #57534e;
-  overflow-wrap: anywhere;
-}
-
-.scheme-card a {
-  padding: 10px 0;
-}
-
-.scheme-note {
-  padding: 14px 16px;
-  background: #fff7ed;
-  border: 1px solid #fed7aa;
-  border-radius: 12px;
-  line-height: 1.7;
-}
-
-/* Scheme form */
-
-.scheme-admin-form {
-  margin: 22px 0;
-  padding: 24px;
-  background: #fffaf5;
-  border: 1px solid #fed7aa;
-  border-radius: 16px;
-}
-
-.scheme-admin-form h3 {
-  margin-bottom: 18px;
-}
-
-.scheme-admin-form form {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px 18px;
-}
-
-.scheme-admin-form label {
-  margin: 0;
-  font-size: 14px;
-}
-
-.scheme-admin-form label:nth-child(3),
-.scheme-admin-form label:nth-child(4),
-.scheme-admin-form label:nth-child(5),
-.scheme-admin-form label:nth-child(6) {
-  grid-column: 1 / -1;
-}
-
-.scheme-admin-form button {
-  justify-self: start;
-  margin: 6px 0 0;
-}
-
-/* Responsive sidebar */
-
-@media (max-width: 800px) {
-  .admin-panel {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-    padding: 14px;
-  }
-
-  .admin-heading {
-    margin: 0;
-    padding: 22px;
-  }
-
-  .admin-service-nav {
-    position: static;
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    width: 100%;
-  }
-
-  .admin-service-content {
-    padding: 18px;
-  }
+  body { font-size: 16px; }
+  .app header { padding: 32px 16px 96px; }
+  .app header::before { width: 190px; height: 190px; right: -30px; }
+  .app main { padding: 0 14px 32px; margin-top: -44px; }
+  .app main h2 { font-size: 25px; }
+  .village-overview, .dashboard { padding: 22px; }
+  .overview-card { min-height: auto; padding: 22px; }
+  .complaint-page, .complaints-page, .complaint-list, .complaint-db, .notices-page, .projects-page { padding: 10px; }
+  .app main table { font-size: 14px; }
+  .app main th, .app main td { padding: 8px; }
 }
 
 @media (max-width: 520px) {
-  .admin-service-nav {
-    grid-template-columns: 1fr;
-    padding: 10px;
+  .admin-service-nav { grid-template-columns: 1fr; }
+  .scheme-admin-form { padding: 18px; }
+  .scheme-admin-form form { grid-template-columns: 1fr; }
+  .scheme-admin-form label, .scheme-admin-form label:nth-child(n) { grid-column: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
+
+/* ===== Attractive Admin Complaint Summary Cards ===== */
+
+.admin-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+}
+
+.admin-stat {
+  position: relative;
+  overflow: hidden;
+  padding: 22px 18px;
+  min-height: 125px;
+  border: 1px solid #e5eaf3;
+  border-radius: 18px;
+  background: linear-gradient(145deg, #ffffff, #f3f6fc);
+  box-shadow: 0 7px 20px rgba(18, 42, 78, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.admin-stat:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 26px rgba(18, 42, 78, 0.14);
+}
+
+.admin-stat::after {
+  content: "";
+  position: absolute;
+  width: 85px;
+  height: 85px;
+  right: -28px;
+  bottom: -35px;
+  border-radius: 50%;
+  background: rgba(255, 132, 0, 0.12);
+}
+
+.admin-stat span {
+  display: block;
+  margin-bottom: 14px;
+  color: #53627a;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.admin-stat strong {
+  display: block;
+  color: #142b50;
+  font-size: 34px;
+  line-height: 1;
+  font-weight: 800;
+}
+
+.admin-stat:first-child {
+  border-top: 4px solid #ff8500;
+}
+
+.admin-stat.pending-stat {
+  border-top: 4px solid #e9a11b;
+}
+
+.admin-stat.progress-stat {
+  border-top: 4px solid #3478db;
+}
+
+.admin-stat.resolved-stat {
+  border-top: 4px solid #20a36a;
+}
+
+.admin-list-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+  margin-bottom: 14px;
+}
+
+.admin-list-heading h3 {
+  margin: 0 0 6px;
+  color: #142b50;
+  font-size: 20px;
+}
+
+.admin-list-heading p {
+  margin: 0;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.admin-complaint {
+  border-radius: 14px;
+  box-shadow: 0 5px 18px rgba(18, 42, 78, 0.07);
+  transition: box-shadow 0.2s ease;
+}
+
+.admin-complaint:hover {
+  box-shadow: 0 9px 24px rgba(18, 42, 78, 0.12);
+}
+
+.admin-refresh {
+  border-radius: 12px;
+  font-weight: 700;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.admin-refresh:hover {
+  transform: translateY(-1px);
+}
+
+@media (max-width: 850px) {
+  .admin-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-stats {
+    gap: 10px;
   }
 
-  .scheme-admin-form {
-    padding: 16px;
+  .admin-stat {
+    min-height: 105px;
+    padding: 17px 13px;
+    border-radius: 14px;
   }
 
-  .scheme-admin-form form {
-    grid-template-columns: 1fr;
+  .admin-stat strong {
+    font-size: 28px;
   }
 
-  .scheme-admin-form label,
-  .scheme-admin-form label:nth-child(n) {
-    grid-column: 1;
+  .admin-stat span {
+    font-size: 12px;
+  }
+}
+
+/* ===== Fixed Compact Header - GramVikas ===== */
+
+.app > header {
+  position: relative;
+  box-sizing: border-box;
+  min-height: 118px;
+  height: auto;
+  padding: 10px 16px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  overflow: visible;
+  z-index: 2;
+}
+
+.app > header h1 {
+  margin: 0;
+  font-size: 26px;
+  line-height: 1.2;
+}
+
+.app > header p {
+  margin: 2px 0 6px;
+  font-size: 13px;
+}
+
+.app > header button {
+  position: relative;
+  z-index: 5;
+  flex-shrink: 0;
+  padding: 7px 16px;
+  margin: 2px 4px;
+  font-size: 12px;
+}
+
+/* Keep the decorative wave behind the buttons */
+.app > header::before,
+.app > header::after {
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Keep header content above decorative elements */
+.app > header > * {
+  position: relative;
+  z-index: 2;
+}
+
+.app > main {
+  position: relative;
+  z-index: 1;
+  padding-top: 12px;
+}
+
+@media (max-width: 600px) {
+  .app > header {
+    min-height: 110px;
+    padding: 10px 12px 22px;
+    gap: 5px;
   }
 
-  .scheme-card {
-    padding: 18px;
+  .app > header h1 {
+    font-size: 23px;
   }
 }

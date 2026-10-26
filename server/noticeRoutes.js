@@ -1,23 +1,29 @@
 
 const express = require("express");
+const { ObjectId } = require("mongodb");
+const verifyAdmin = require("./authMiddleware");
 const router = express.Router();
 const connectDB = require("./db");
 
-// Add a new notice
-router.post("/", async (req, res) => {
+// Admin only: Add a new notice
+router.post("/", verifyAdmin, async (req, res) => {
   try {
     const db = await connectDB();
     const { title, description, date } = req.body;
 
-    if (!title || !description || !date) {
+    if (
+      !title?.trim() ||
+      !description?.trim() ||
+      !date
+    ) {
       return res.status(400).json({
         message: "Title, description and date are required",
       });
     }
 
     const notice = {
-      title,
-      description,
+      title: title.trim(),
+      description: description.trim(),
       date,
       createdAt: new Date(),
     };
@@ -29,11 +35,12 @@ router.post("/", async (req, res) => {
       id: result.insertedId,
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("Add notice error:", error);
+    res.status(500).json({ message: "Failed to publish notice" });
   }
 });
 
-// Get all notices
+// Public: Get all notices
 router.get("/", async (req, res) => {
   try {
     const db = await connectDB();
@@ -46,7 +53,38 @@ router.get("/", async (req, res) => {
 
     res.json(notices);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("Get notices error:", error);
+    res.status(500).json({ message: "Failed to load notices" });
+  }
+});
+
+// Admin only: Delete a notice
+router.delete("/:id", verifyAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!ObjectId.isValid(id)) {
+      return res.status(400).json({
+        message: "Invalid notice ID",
+      });
+    }
+
+    const db = await connectDB();
+
+    const result = await db.collection("notices").deleteOne({
+      _id: new ObjectId(id),
+    });
+
+    if (result.deletedCount === 0) {
+      return res.status(404).json({
+        message: "Notice not found",
+      });
+    }
+
+    res.json({ message: "Notice deleted successfully" });
+  } catch (error) {
+    console.error("Delete notice error:", error);
+    res.status(500).json({ message: "Failed to delete notice" });
   }
 });
 

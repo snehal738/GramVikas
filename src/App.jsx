@@ -86,13 +86,15 @@ function App() {
 )}
         {page === "Home" && (
           <>
-            <button onClick={() => setPage("Home")}>
-              Home
-            </button>
+           <nav className="header-navigation">
+  <button onClick={() => setPage("Home")}>
+    Home
+  </button>
 
-            <button onClick={() => setPage("Admin Login")}>
-              Admin Login
-            </button>
+  <button onClick={() => setPage("Admin Login")}>
+    Admin Login
+  </button>
+</nav>
           </>
         )}
 
@@ -247,8 +249,7 @@ function App() {
             {/* Complaints */}
             {page === "Village Complaints" && (
               <>
-                <ComplaintDB />
-                <ComplaintList />
+                <ComplaintDB />            
               </>
             )}
 

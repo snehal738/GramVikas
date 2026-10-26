@@ -84,4 +84,39 @@ router.patch("/:id/status", verifyAdmin, async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
+/* Delete complaint (Admin only) */
+router.delete("/:id", verifyAdmin, async (req, res) => {
+  try {
+    const db = await connectDB();
+    const { id } = req.params;
+
+    if (!ObjectId.isValid(id)) {
+      return res.status(400).json({
+        message: "Invalid complaint ID",
+      });
+    }
+
+    const result = await db.collection("complaints").deleteOne({
+      _id: new ObjectId(id),
+    });
+
+    if (result.deletedCount === 0) {
+      return res.status(404).json({
+        message: "Complaint not found",
+      });
+    }
+
+    return res.json({
+      message: "Complaint deleted successfully",
+    });
+  } catch (error) {
+    console.error("Delete complaint error:", error);
+    return res.status(500).json({
+      message: "Failed to delete complaint",
+    });
+  }
+});
+
+
 module.exports = router;

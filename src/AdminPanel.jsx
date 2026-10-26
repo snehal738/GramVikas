@@ -5,7 +5,7 @@ import Projects from "./Projects";
 import Schemes from "./Schemes";
 
 function AdminPanel() {
-  const [section, setSection] = useState("Complaints");
+  const [section, setSection] = useState("");
   const [complaints, setComplaints] = useState([]);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(true);
@@ -68,6 +68,38 @@ function AdminPanel() {
     }
   };
 
+  const deleteComplaint = async (id, title) => {
+    const confirmed = window.confirm(
+      `Are you sure you want to delete the complaint "${title}"? This action cannot be undone.`
+    );
+
+    if (!confirmed) return;
+
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/complaints/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("adminToken")}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setMessage(data.message || "Failed to delete complaint.");
+        return;
+      }
+
+      setMessage("Complaint deleted successfully.");
+      await fetchComplaints();
+    } catch (error) {
+      setMessage("Unable to delete complaint. Check the backend.");
+    }
+  };
+
   const total = complaints.length;
   const pending = complaints.filter(
     (item) => item.status === "Pending"
@@ -120,7 +152,15 @@ function AdminPanel() {
           </button>
         ))}
       </nav>
-
+        {section === "" && (
+  <div className="admin-service-content">
+    <h3>Welcome to GramVikas Admin</h3>
+    <p>
+      Select a service from the menu to manage village complaints,
+      notices, development projects, or government schemes.
+    </p>
+  </div>
+)}
       {section === "Complaints" && (
         <>
           <div className="admin-stats">
@@ -232,7 +272,17 @@ function AdminPanel() {
                       <option value="In Progress">In Progress</option>
                       <option value="Resolved">Resolved</option>
                     </select>
-                  </div>
+                  </div>                  
+  <button
+    type="button"
+    className="admin-delete-button"
+    onClick={() =>
+      deleteComplaint(complaint._id, complaint.title)
+    }
+  >
+    Delete Complaint
+  </button>
+
                 </article>
               ))}
             </div>
@@ -244,7 +294,7 @@ function AdminPanel() {
         <div className="admin-service-content">
           <h3>Manage Village Notices</h3>
           <p>Village notices are displayed below.</p>
-          <Notices />
+         <Notices isAdmin={true} />
           <p>
             Add, edit, and delete controls will need to be connected
             to your notice storage before this section can manage notices.
