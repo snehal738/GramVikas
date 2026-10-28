@@ -10,46 +10,61 @@ const rl = readline.createInterface({
   output: process.stdout,
 });
 
-rl.question("Enter admin username: ", async (username) => {
-  rl.question("Enter admin password (minimum 8 characters): ", async (password) => {
-    rl.question("Enter ADMIN_SETUP_SECRET from your .env: ", async (secret) => {
-      try {
-        if (!username.trim() || password.length < 8) {
-          throw new Error("Username is required and password must be at least 8 characters.");
-        }
+function ask(question) {
+  return new Promise((resolve) => rl.question(question, resolve));
+}
 
-        if (!process.env.ADMIN_SETUP_SECRET ||
-            secret !== process.env.ADMIN_SETUP_SECRET) {
-          throw new Error("Admin setup secret does not match .env.");
-        }
+async function main() {
+  try {
+    const username = (await ask("Enter admin username: ")).trim();
+    const password = await ask(
+      "Enter admin password (minimum 8 characters): "
+    );
+    const village = (await ask("Enter admin village name: ")).trim();
+    const secret = await ask("Enter ADMIN_SETUP_SECRET from your .env: ");
 
-        const db = await connectDB();
-        const admins = db.collection("admins");
+    if (!username || password.length < 8 || !village) {
+      throw new Error(
+        "Username, village, and a password of at least 8 characters are required."
+      );
+    }
 
-        const existing = await admins.findOne({
-          username: username.trim(),
-        });
+    if (
+      !process.env.ADMIN_SETUP_SECRET ||
+      secret !== process.env.ADMIN_SETUP_SECRET
+    ) {
+      throw new Error("Admin setup secret does not match .env.");
+    }
 
-        if (existing) {
-          throw new Error("This admin username already exists.");
-        }
+    const db = await connectDB();
+    const admins = db.collection("admins");
 
-        const hashedPassword = await bcrypt.hash(password, 12);
+    const existing = await admins.findOne({ username });
 
-        await admins.insertOne({
-          username: username.trim(),
-          password: hashedPassword,
-          role: "admin",
-          createdAt: new Date(),
-        });
+    if (existing) {
+      throw new Error(
+        "This admin username already exists. Existing admin was not changed."
+      );
+    }
 
-        console.log("Admin registered successfully!");
-      } catch (error) {
-        console.error("Registration failed:", error.message);
-      } finally {
-        rl.close();
-        process.exitCode = 0;
-      }
+    const hashedPassword = await bcrypt.hash(password, 12);
+
+    await admins.insertOne({
+      username,
+      password: hashedPassword,
+      village,
+      role: "admin",
+      createdAt: new Date(),
     });
-  });
-});
+
+    console.log("Admin registered successfully!");
+    console.log("Village:", village);
+  } catch (error) {
+    console.error("Registration failed:", error.message);
+    process.exitCode = 1;
+  } finally {
+    rl.close();
+  }
+}
+
+main();

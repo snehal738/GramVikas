@@ -10,6 +10,9 @@ function AdminPanel() {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("All");
+  const [citizens, setCitizens] = useState([]);
+const [citizenLoading, setCitizenLoading] = useState(false);
+const [citizenMessage, setCitizenMessage] = useState("");
 
   const fetchComplaints = async () => {
     setLoading(true);
@@ -35,7 +38,61 @@ function AdminPanel() {
       setLoading(false);
     }
   };
+  const fetchPendingCitizens = async () => {
+  setCitizenLoading(true);
+  setCitizenMessage("");
 
+  try {
+    const response = await fetch(
+      "http://localhost:5000/api/auth/citizens/pending",
+      {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem("adminToken")}`,
+        },
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "Unable to load pending citizens.");
+    }
+
+    setCitizens(Array.isArray(data.citizens) ? data.citizens : []);
+  } catch (error) {
+    setCitizenMessage(error.message || "Unable to connect to the backend.");
+  } finally {
+    setCitizenLoading(false);
+  }
+};
+const updateCitizenStatus = async (id, status) => {
+  setCitizenMessage("");
+
+  try {
+    const response = await fetch(
+      `http://localhost:5000/api/auth/citizens/${id}/status`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${sessionStorage.getItem("adminToken")}`,
+        },
+        body: JSON.stringify({ status }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "Unable to update citizen status.");
+    }
+
+    setCitizenMessage(data.message || `Citizen ${status.toLowerCase()} successfully.`);
+    await fetchPendingCitizens();
+  } catch (error) {
+    setCitizenMessage(error.message || "Unable to connect to the backend.");
+  }
+};
   useEffect(() => {
     fetchComplaints();
   }, []);
@@ -100,8 +157,9 @@ function AdminPanel() {
     }
   };
 
-  const total = complaints.length;
-  const pending = complaints.filter(
+const total = complaints.filter(
+  (item) => item.status !== "Resolved"
+).length;  const pending = complaints.filter(
     (item) => item.status === "Pending"
   ).length;
   const inProgress = complaints.filter(
@@ -163,28 +221,7 @@ function AdminPanel() {
 )}
       {section === "Complaints" && (
         <>
-          <div className="admin-stats">
-            <div className="admin-stat">
-              <span>Total Complaints</span>
-              <strong>{total}</strong>
-            </div>
-
-            <div className="admin-stat pending-stat">
-              <span>Pending</span>
-              <strong>{pending}</strong>
-            </div>
-
-            <div className="admin-stat progress-stat">
-              <span>In Progress</span>
-              <strong>{inProgress}</strong>
-            </div>
-
-            <div className="admin-stat resolved-stat">
-              <span>Resolved</span>
-              <strong>{resolved}</strong>
-            </div>
-          </div>
-
+         
           {message && (
             <div className="admin-message" role="status">
               {message}

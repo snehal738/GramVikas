@@ -1,4 +1,7 @@
 
+import CitizenDashboard from "./CitizenDashboard";
+import CitizenRegister from "./CitizenRegister";
+import CitizenLogin from "./CitizenLogin";
 import Schemes from "./Schemes";
 import AdminLogin from "./AdminLogin";
 import Projects from "./Projects";
@@ -87,16 +90,58 @@ function App() {
         {page === "Home" && (
           <>
            <nav className="header-navigation">
-  <button onClick={() => setPage("Home")}>
-    Home
-  </button>
-
-  <button onClick={() => setPage("Admin Login")}>
-    Admin Login
-  </button>
+  
 </nav>
           </>
         )}
+
+{/* About Page */}
+{page === "About" && (
+  <section className="info-page">
+    <h2>About GramVikas</h2>
+
+    <p>
+      GramVikas is a digital village development platform
+      designed to connect villagers with local information
+      and public services.
+    </p>
+
+    <h3>Our Purpose</h3>
+    <p>
+      To make village information more accessible and
+      support transparent village development.
+    </p>
+
+    <h3>Our Services</h3>
+    <p>
+      Citizens can explore village notices, development
+      projects, government schemes, and complaint services.
+    </p>
+  </section>
+)}
+
+{/* Contact Page */}
+{page === "Contact" && (
+  <section className="info-page">
+    <h2>Contact GramVikas</h2>
+
+    <p>
+      Have a question about village services or development?
+    </p>
+
+    <h3>Contact Your Village Administration</h3>
+
+    <p>
+      Please contact your local village administration
+      for assistance with village services.
+    </p>
+
+    <p>
+      For technical issues with this platform, contact
+      the GramVikas project administrator.
+    </p>
+  </section>
+)}
 
         {adminUsername && (
           <div>
@@ -112,120 +157,107 @@ function App() {
       <main>
         {page === "Home" ? (
           <>
-            <h2>Welcome to GramVikas</h2>
+            
 
-            <p>
-              Connecting villagers with local services,
-              village updates, and development projects.
-            </p>
+<>
+  <section className="modern-hero">
+    <div className="hero-content">
+      <span className="hero-badge">
+        DIGITAL VILLAGE PLATFORM
+      </span>
 
-            {/* Complaint Dashboard */}
-            <section className="dashboard">
-              <h2>Village Complaint Dashboard</h2>
+      <h2>Growing Together, Building Tomorrow</h2>
 
-              <div className="dashboard-grid">
-                <div className="stat-card">
-                  <h3>Total Complaints</h3>
-                  <p>{totalComplaints}</p>
-                </div>
+      <p className="hero-subtitle">
+        Welcome to GramVikas
+      </p>
 
-                <div className="stat-card">
-                  <h3>Pending</h3>
-                  <p>{pendingComplaints}</p>
-                </div>
+      <p className="hero-description">
+        Your village, your voice, your development.
+        Access village services, discover development projects,
+        and stay connected with your community.
+      </p>
+    </div>
 
-                <div className="stat-card">
-                  <h3>In Progress</h3>
-                  <p>{inProgressComplaints}</p>
-                </div>
+    <div className="hero-decoration" aria-hidden="true">
+      <div className="sun-circle"></div>
+      <div className="field field-one"></div>
+      <div className="field field-two"></div>
+    </div>
+  </section>
 
-                <div className="stat-card">
-                  <h3>Resolved</h3>
-                  <p>{resolvedComplaints}</p>
-                </div>
-              </div>
-            </section>
+  <section className="modern-services">
+    <div className="section-heading">
+      <span>GET STARTED</span>
+      <h2>How can we help you?</h2>
+      <p>Choose an option to access GramVikas services.</p>
+    </div>
 
-            {/* Village Overview */}
-            <section className="village-overview">
-              <h2>Village Overview</h2>
+    <div className="modern-service-grid">
+      <button
+        className="modern-service-card"
+        onClick={() => setPage("Admin Login")}
+      >
+        <span className="modern-service-icon admin-icon">
+          🛡️
+        </span>
+        <h3>Admin Login</h3>
+      </button>
 
-              <p>
-                Welcome to GramVikas, a digital platform for
-                village services, public complaints, notices,
-                and development.
-              </p>
+      <button
+        className="modern-service-card"
+        onClick={() => setPage("Citizen Registration")}
+      >
+        <span className="modern-service-icon register-icon">
+          👥
+        </span>
+        <h3>Citizen Registration</h3>
+      
+      </button>
 
-              <div className="overview-grid">
-                <div className="overview-card">
-                  <h3>📢 Village Notices</h3>
-                  <p>
-                    Stay updated with important village announcements.
-                  </p>
-                  <button
-                    onClick={() => setPage("Village Notices")}
-                  >
-                    View Notices
-                  </button>
-                </div>
+      <button
+        className="modern-service-card"
+        onClick={() => setPage("Citizen Login")}
+      >
+        <span className="modern-service-icon citizen-icon">
+          🏡
+        </span>
+        <h3>Citizen Login</h3>
+        
+      </button>
+    </div>
+  </section>
 
-                <div className="overview-card">
-                  <h3>🏗️ Development Projects</h3>
-                  <p>
-                    Explore village development projects and their progress.
-                  </p>
-                  <button
-                    onClick={() => setPage("Development Projects")}
-                  >
-                    View Projects
-                  </button>
-                </div>
+  <section className="modern-information">
+    <div className="modern-info-card about-card">
+      <span className="info-label">OUR MISSION</span>
+      <h2>About GramVikas</h2>
+      <p>
+        GramVikas is a digital village development platform
+        designed to connect citizens with village information,
+        public services, development projects and government schemes.
+      </p>
+      <p>
+        Our goal is to make information easier to access and
+        support transparent village development.
+      </p>
+    </div>
 
-                <div className="overview-card">
-                  <h3>🏛️ Government Schemes</h3>
-                  <p>
-                    Discover government schemes and available information.
-                  </p>
-                  <button
-                    onClick={() => setPage("Government Schemes")}
-                  >
-                    View Schemes
-                  </button>
-                </div>
+    <div className="modern-info-card contact-card">
+      <span className="info-label">WE ARE HERE TO HELP</span>
+      <h2>Contact Information</h2>
+      <p>
+        Need help with village services? Contact your local
+        village administration.
+      </p>
+      <p>
+        For technical issues with this platform, contact
+        the GramVikas project administrator.
+      </p>
+    </div>
+  </section>
+</>
 
-                <div className="overview-card">
-                  <h3>📝 Public Complaints</h3>
-                  <p>
-                    Submit a complaint or check existing complaints.
-                  </p>
-                  <button
-                    onClick={() => setPage("Village Complaints")}
-                  >
-                    Manage Complaints
-                  </button>
-                </div>
-              </div>
-            </section>
-
-            {/* Public Services */}
-            <h3>Our Services</h3>
-
-            <div className="services">
-              {services.map((service) => (
-                <button
-                  key={service}
-                  onClick={() => setPage(service)}
-                >
-                  {service}
-                </button>
-              ))}
-
-              <button
-                onClick={() => setPage("View Complaints")}
-              >
-                View Complaints
-              </button>
-            </div>
           </>
         ) : (
           <>
@@ -245,7 +277,34 @@ function App() {
                 }}
               />
             )}
+            {/* Citizen Registration */}
+{page === "Citizen Registration" && (
+  <CitizenRegister
+    onBack={() => setPage("Home")}
+  />
+)}
 
+{/* Citizen Login */}
+{page === "Citizen Login" && (
+  <CitizenLogin
+    onBack={() => setPage("Home")}
+    onLogin={() => {
+      setPage("Citizen Dashboard");
+    }}
+  />
+)}
+
+{/* Citizen Dashboard */}
+{page === "Citizen Dashboard" && sessionStorage.getItem("citizenToken") && (
+  <CitizenDashboard
+    onLogout={() => {
+      sessionStorage.removeItem("citizenToken");
+      sessionStorage.removeItem("citizenUsername");
+      sessionStorage.removeItem("citizenVillage");
+      setPage("Citizen Login");
+    }}
+  />
+)}
             {/* Complaints */}
             {page === "Village Complaints" && (
               <>
